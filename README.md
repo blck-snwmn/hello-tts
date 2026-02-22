@@ -4,15 +4,15 @@
 
 ### VOICEVOX
 
-`voicevox/speaker_config.py.example` をコピーして `voicevox/speaker_config.py` を作成してください。
+Copy `voicevox/speaker_config.py.example` to `voicevox/speaker_config.py`.
 
 ```bash
 cp voicevox/speaker_config.py.example voicevox/speaker_config.py
 ```
 
-`ALLOWED_SPEAKERS` に音声生成対象のスピーカー名を、`EXCLUDED_VVMS` にロードしないVVMファイル名を設定してください。
+Set speaker names for TTS generation in `ALLOWED_SPEAKERS`, and VVM filenames to skip loading in `EXCLUDED_VVMS`.
 
-#### 実行
+#### Run
 
 ```bash
 cd voicevox

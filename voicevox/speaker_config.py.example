@@ -1,6 +1,6 @@
 ALLOWED_SPEAKERS: set[str] = {
-    # "スピーカー名A",
-    # "スピーカー名B",
+    # "Speaker Name A",
+    # "Speaker Name B",
 }
 
 EXCLUDED_VVMS: set[str] = {

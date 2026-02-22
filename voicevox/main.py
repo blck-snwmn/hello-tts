@@ -65,4 +65,4 @@ with ThreadPoolExecutor() as executor:
         except Exception as e:
             print(f"  [ERROR] {name}({sname}): {e}")
 
-print("全モデルの生成が完了しました")
+print("Generation complete")
