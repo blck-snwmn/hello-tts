@@ -10,6 +10,6 @@ wheels/
 .venv
 
 # VOICEVOX Core resources
-voicevox_core/
-download
-output.wav
+voicevox/voicevox_core/
+voicevox/download
+voicevox/output.wav

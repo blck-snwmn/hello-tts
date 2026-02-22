@@ -2,10 +2,21 @@ version = 1
 revision = 3
 requires-python = ">=3.13"
 
+[manifest]
+members = [
+    "hello-tts",
+    "voicevox",
+]
+
 [[package]]
 name = "hello-tts"
 version = "0.1.0"
 source = { virtual = "." }
+
+[[package]]
+name = "voicevox"
+version = "0.1.0"
+source = { virtual = "voicevox" }
 dependencies = [
     { name = "voicevox-core" },
 ]
