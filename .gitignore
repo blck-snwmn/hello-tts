@@ -12,4 +12,4 @@ wheels/
 # VOICEVOX Core resources
 voicevox/voicevox_core/
 voicevox/download
-voicevox/output.wav
+voicevox/output/

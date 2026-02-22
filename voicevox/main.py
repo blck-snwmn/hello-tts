@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from voicevox_core.blocking import Onnxruntime, OpenJtalk, Synthesizer, VoiceModelFile
 
 onnxruntime = Onnxruntime.load_once(
@@ -21,7 +23,12 @@ text = (
 )
 
 wav = synthesizer.tts(text, style_id=3)
-with open("output.wav", "wb") as f:
+
+output_dir = Path("output")
+output_dir.mkdir(exist_ok=True)
+output_path = output_dir / "output.wav"
+
+with open(output_path, "wb") as f:
     f.write(wav)
 
-print("output.wav を生成しました (VOICEVOX:ずんだもん)")
+print(f"{output_path} を生成しました (VOICEVOX:ずんだもん)")
