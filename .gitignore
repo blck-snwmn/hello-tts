@@ -13,3 +13,4 @@ wheels/
 voicevox/voicevox_core/
 voicevox/download
 voicevox/output/
+voicevox/speaker_config.py

@@ -1,14 +1,21 @@
+import glob
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 from voicevox_core.blocking import Onnxruntime, OpenJtalk, Synthesizer, VoiceModelFile
+
+from speaker_config import ALLOWED_SPEAKERS, EXCLUDED_VVMS
 
 onnxruntime = Onnxruntime.load_once(
     filename=f"./voicevox_core/onnxruntime/lib/{Onnxruntime.LIB_VERSIONED_FILENAME}"
 )
 synthesizer = Synthesizer(onnxruntime, OpenJtalk("./voicevox_core/dict/open_jtalk_dic_utf_8-1.11"))
 
-with VoiceModelFile.open("./voicevox_core/models/vvms/0.vvm") as model:
-    synthesizer.load_voice_model(model)
+for vvm_path in sorted(glob.glob("./voicevox_core/models/vvms/*.vvm")):
+    if Path(vvm_path).name in EXCLUDED_VVMS:
+        continue
+    with VoiceModelFile.open(vvm_path) as model:
+        synthesizer.load_voice_model(model)
 
 text = (
     "おはようございます。今日は2025年2月22日、土曜日です。"
@@ -22,13 +29,40 @@ text = (
     "まあ、とりあえず頑張っていきましょう！"
 )
 
-wav = synthesizer.tts(text, style_id=3)
-
 output_dir = Path("output")
 output_dir.mkdir(exist_ok=True)
-output_path = output_dir / "output.wav"
 
-with open(output_path, "wb") as f:
-    f.write(wav)
+styles = [
+    (meta.name, style.name, style.id)
+    for meta in synthesizer.metas()
+    if meta.name in ALLOWED_SPEAKERS
+    for style in meta.styles
+]
 
-print(f"{output_path} を生成しました (VOICEVOX:ずんだもん)")
+
+def generate(speaker_name: str, style_name: str, style_id: int) -> str:
+    filename = f"{speaker_name}_{style_name}_{style_id}.wav"
+    output_path = output_dir / filename
+
+    wav = synthesizer.tts(text, style_id=style_id)
+    with open(output_path, "wb") as f:
+        f.write(wav)
+
+    return str(output_path)
+
+
+with ThreadPoolExecutor() as executor:
+    futures = {
+        executor.submit(generate, name, sname, sid): (name, sname)
+        for name, sname, sid in styles
+    }
+
+    for future in as_completed(futures):
+        name, sname = futures[future]
+        try:
+            path = future.result()
+            print(f"  {path}")
+        except Exception as e:
+            print(f"  [ERROR] {name}({sname}): {e}")
+
+print("全モデルの生成が完了しました")
