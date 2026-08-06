@@ -2,7 +2,7 @@
 name = "voicevox"
 version = "0.1.0"
 description = "VOICEVOX TTS engine"
-requires-python = ">=3.13"
+requires-python = "==3.14.7"
 dependencies = [
     "voicevox-core",
 ]
